@@ -1,0 +1,26 @@
+
+class {{ className }}: EntryDecodable, EntryQueryable {
+
+    static let contentTypeId = "{{ contentTypeId }}"
+
+    let sys: Sys
+    {{#properties}}
+    {{declaration}}
+    {{/properties}}
+
+    public required init(from decoder: Decoder) throws {
+        sys  = try decoder.sys()
+        let fields = try decoder.contentfulFieldsContainer(keyedBy: Fields.self)
+        {{#properties}}
+        {{initStatement}}
+        {{/properties}}
+    }
+
+    // MARK: EntryQueryable
+
+    enum Fields: String, CodingKey {
+      {{#properties}}
+      {{codingKeyStatement}}
+      {{/properties}}
+    }
+}
